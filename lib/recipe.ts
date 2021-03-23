@@ -24,16 +24,8 @@ export async function getRecipes(): Promise<Recipe[]> {
       headers: { "X-Api-Key": "remark-fish-magician" },
     }
   );
-  const recipes = await response.json();
+  const jsonData = await response.json();
+  const links = jsonData?.links;
+  const recipes = jsonData?.recipes;
   return recipes as Recipe[];
-}
-
-export async function getRecipe(id: number): Promise<Recipe | null> {
-  const response = await fetch(
-    "https://internship-recipe-api.ckpd.co/recipes",
-    { headers: { "X-APi-Key": "reamark-fish-magician" } }
-  );
-  const recipes = await response.json();
-
-  return (recipes as Recipe[]).find((recipe) => recipe.id === id) || null;
 }

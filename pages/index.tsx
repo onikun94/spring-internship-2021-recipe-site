@@ -6,21 +6,17 @@ import type { Recipe } from "../lib/recipe";
 
 type Props = {
   recipes: Recipe[];
-  link: { next?: string; prev?: string };
+  link: { next: string | null; prev?: string | null };
 };
 
 const Home: NextPage<Props> = (props) => {
+  const recipeArray = props.recipes;
   return (
     <div>
-      <h1>料理</h1>
-      <h2>test</h2>
-      <ul>
-        <li>aa</li>
-        {props.recipes.map((recipeData) => {
-          //console.log(recipeData);
-          <li key={recipeData.id}>{recipeData.title}</li>;
-        })}
-      </ul>
+      {recipeArray.map((r) => (
+        <p>{r.title}</p>
+      ))}
+      <h1>aa</h1>
     </div>
   );
 };
