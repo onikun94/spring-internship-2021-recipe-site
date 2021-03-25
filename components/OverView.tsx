@@ -1,14 +1,11 @@
-import React from "react";
+import React, { FC } from "react";
 import Link from "next/link";
+import type { Recipe } from "../lib/recipe";
 
-const OverView = (props) => {
+const OverView = () => {
   return (
     <div>
-      <Link href={`/recipes/${props.id}`}>{props.title}</Link>
-      <p>{props.description}</p>
-      {props.image_url && (
-        <img src={props.image_url} alt="レシピ画像" width="300" />
-      )}
+      <p>This component will be delated</p>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { getPages, getRecipes, search } from "../lib/recipe";
+import Link from "next/link";
 import { FC, useState, useEffect } from "react";
 import Header from "../components/Header";
 import OverView from "../components/OverView";
@@ -99,12 +100,13 @@ const TopPage: FC = () => {
 
       {recipes.map((r) => (
         <div key={r.id}>
-          <OverView
-            id={r.id}
-            title={r.title}
-            description={r.description}
-            image_url={r.image_url}
-          />
+          <div>
+            <Link href={`/recipes/${r.id}`}>{r.title}</Link>
+            <p>{r.description}</p>
+            {r.image_url && (
+              <img src={r.image_url} alt="レシピ画像" width="300" />
+            )}
+          </div>
         </div>
       ))}
       <div className="buttonState">
