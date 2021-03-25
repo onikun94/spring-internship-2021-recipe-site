@@ -3,35 +3,78 @@ import React from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
 import { getPages, getRecipes, search } from "../lib/recipe";
 import Link from "next/link";
 import { FC, useState, useEffect } from "react";
 import Header from "../components/Header";
 import OverView from "../components/OverView";
 import type { Recipe, Links } from "../lib/recipe";
-
+import { NONAME } from "node:dns";
+//import { test_color } from "../style/Test";
+//import "../style/App.css";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       "& > *": {
         margin: theme.spacing(1),
-
-        //padding: theme.spacing(2),
       },
     },
     field: {
       "& > *": {
-        margin: theme.spacing(1),
-        width: "25ch",
+        margin: "0px",
+        marginBottom: "10px",
+        width: "30ch",
       },
+    },
+    link: {
+      fontSize: 16,
+      color: "black",
+      textDecoration: "none",
+    },
+    card: {
+      //maxWidth: 600,
+      padding: 10,
+      paddingBottom: "0px",
+      backgroundColor: "lavender",
+      border: "medium solid #ffffff",
+    },
+    cardBottom: {
+      paddingBottom: "0px",
+    },
+    all: {
+      backgroundColor: "#ffffff",
+      overflowX: "hidden",
+      //width: "100%",
+      //height: "100%",
+    },
+    image: {
+      //textAlign: "left",
+      verticalAlign: "middle",
+      borderRadius: "10px",
+    },
+    text: {
+      //textAlign: "right",
+      marginLeft: "10px",
+      verticalAlign: "middle",
+    },
+    button: {
+      position: "relative",
+      //left: "250px",
+    },
+    flex: {
+      display: "flex",
     },
   })
 );
+
 const TopPage: FC = () => {
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [keyword, setKeyword] = useState<string>("");
   const [link, setLink] = useState<Links | null>(null);
   const classes = useStyles();
+  const image = null;
 
   const handleSubmit = async (words: string) => {
     if (keyword !== "") {
@@ -44,7 +87,7 @@ const TopPage: FC = () => {
 
   const handlePage = async () => {
     if (link !== null && link.next) {
-      const response = await getPages(link?.next);
+      const response = await getPages(link.next);
       setRecipes(response.recipes);
       setLink(response.links);
     }
@@ -52,7 +95,7 @@ const TopPage: FC = () => {
 
   const handlePage2 = async () => {
     if (link !== null && link.prev) {
-      const response = await getPages(link?.prev);
+      const response = await getPages(link.prev);
       setRecipes(response.recipes);
       setLink(response.links);
     }
@@ -69,12 +112,11 @@ const TopPage: FC = () => {
     })();
   }, []);
 
-  if (recipes === null) return <div>THERE IS NO RECIPES</div>;
+  if (recipes === null) return <div>LOADING</div>;
 
   return (
-    <div>
+    <div className={classes.all}>
       <Header />
-
       <div>
         <form
           className={classes.field}
@@ -88,7 +130,7 @@ const TopPage: FC = () => {
         >
           <TextField
             id="filled-basic"
-            label="料理名"
+            label="料理名・食材でレシピ検索"
             variant="filled"
             value={keyword}
             onChange={(e) => {
@@ -101,15 +143,34 @@ const TopPage: FC = () => {
       {recipes.map((r) => (
         <div key={r.id}>
           <div>
-            <Link href={`/recipes/${r.id}`}>{r.title}</Link>
-            <p>{r.description}</p>
-            {r.image_url && (
-              <img src={r.image_url} alt="レシピ画像" width="300" />
-            )}
+            <Card className={classes.card}>
+              <div className={classes.link}>
+                <Link href={`/recipes/${r.id}`}>
+                  <div>
+                    <CardActionArea>
+                      <a className={classes.link}>{r.title}</a>
+                      <div className={classes.flex}>
+                        <p>
+                          {r.image_url && (
+                            <img
+                              src={r.image_url}
+                              alt="レシピ画像"
+                              width="140"
+                              className={classes.image}
+                            />
+                          )}
+                        </p>
+                        <p className={classes.text}>{r.description}</p>
+                      </div>
+                    </CardActionArea>
+                  </div>
+                </Link>
+              </div>
+            </Card>
           </div>
         </div>
       ))}
-      <div className="buttonState">
+      <div className={classes.button}>
         <div className={classes.root}>
           <Button variant="contained" onClick={handlePage2}>
             前へ
