@@ -1,25 +1,29 @@
-import { getRecipe } from "../../lib/recipe";
-
-import type { GetServerSideProps, NextPage } from "next";
-import type { Recipe } from "../../lib/recipe";
+import { useRouter } from "next/router";
+import Header from "../../components/Header";
+import type { NextPage, GetServerSideProps } from "next";
+import { getRecipe, Recipe } from "../../lib/recipe";
+//getserversideprops
 
 type Props = {
   recipe: Recipe;
 };
 
 const RecipePage: NextPage<Props> = (props) => {
+  const router = useRouter();
   const { recipe } = props;
-
+  if (recipe == null) {
+    return <div>THERE IS NO RECIPES</div>;
+  }
   return (
     <div>
-      <h1>My Recipe Site</h1>
+      <Header />
 
       {recipe && (
         <main>
-          <h2>{recipe.name}</h2>
+          <h2>{recipe.title}</h2>
 
-          {recipe.imageUrl && (
-            <img src={recipe.imageUrl} alt="レシピ画像" width="300" />
+          {recipe.image_url && (
+            <img src={recipe.image_url} alt="レシピ画像" width="300" />
           )}
 
           <p>{recipe.description}</p>
